@@ -1,22 +1,28 @@
 package com.alphacoder.subject;
 
-import com.alphacoder.listener.NotificationManager;
-import com.alphacoder.listener.PaymentLogger;
+import com.alphacoder.listener.PaymentListener;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @Data
-@RequiredArgsConstructor(onConstructor = @__ ({@Autowired}))
 public class PaymentManager {
-    private final NotificationManager notificationManager;
-    private final PaymentLogger paymentLogger;
+    private List<PaymentListener> paymentListeners= new ArrayList<>();
 
     public void pay(){
-        paymentLogger.logPayment();
-        notificationManager.notifyPayment();
+        paymentListeners.forEach(PaymentListener:: paymentMade);
+    }
 
+    public void registerPaymentListeners(PaymentListener p){
+        paymentListeners.add(p);
+    }
+
+    public void unRegisterPaymentListeners(PaymentListener p){
+        paymentListeners.remove(p);
     }
 }

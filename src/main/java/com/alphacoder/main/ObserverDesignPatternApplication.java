@@ -1,7 +1,8 @@
 package com.alphacoder.main;
 
-import com.alphacoder.listener.NotificationManager;
-import com.alphacoder.listener.PaymentLogger;
+import com.alphacoder.listener.PaymentListener;
+import com.alphacoder.listener.impl.NotificationManager;
+import com.alphacoder.listener.impl.PaymentLogger;
 import com.alphacoder.subject.PaymentManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,9 +13,9 @@ public class ObserverDesignPatternApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(ObserverDesignPatternApplication.class, args);
-		NotificationManager notificationManager= new NotificationManager();
-		PaymentLogger paymentLogger= new PaymentLogger();
-		PaymentManager paymentManager= new PaymentManager(notificationManager, paymentLogger);
+		PaymentManager paymentManager= new PaymentManager();
+		paymentManager.registerPaymentListeners(new PaymentLogger());
+		paymentManager.registerPaymentListeners(new NotificationManager());
 		paymentManager.pay();
 	}
 
